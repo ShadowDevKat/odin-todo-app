@@ -38,7 +38,7 @@ header {
     grid-row: span 1;
     grid-column: 1 / -1;
     padding: 1rem;
-    background-color: var(--color-primary);
+    background-color: var(--color-tertiary);
 
     display: flex;
     align-items: center;
@@ -76,7 +76,7 @@ header {
 .main-container {
     grid-column: 2 / -1;
     padding: 1rem;
-    background-color: var(--color-tertiary);
+    background-color: var(--color-primary);
 
     display: flex;
     flex-direction: column;
