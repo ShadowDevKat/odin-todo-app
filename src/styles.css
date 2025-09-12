@@ -23,6 +23,7 @@
 body {
     background-color: var(--timber-wolf);
     height: 100dvh;
+    overflow: hidden;
 }
 
 #content {
@@ -73,7 +74,7 @@ header {
     padding-left: 2rem;
 }
 
-.main-container {
+#main-container {
     grid-column: 2 / -1;
     padding: 1rem;
     background-color: var(--color-primary);
@@ -81,10 +82,12 @@ header {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    overflow-y: scroll;
 }
 
 .todo-item {
-    flex: 1;
+    /* flex: 1; */
     padding: 1rem;
     background-color: var(--color-accent);
 }
