@@ -2,6 +2,12 @@ export const levels = {
     LOW: "Low",
     MEDIUM: "Medium",
     HIGH: "High"
+};
+
+// Sanitizer that strips all HTML tags
+function sanitize(input) {
+    if (typeof input !== "string") return input;
+    return input.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
 export class TodoItem {
@@ -9,8 +15,8 @@ export class TodoItem {
 
     constructor(title, description = "", dueDate = null, priority = levels.LOW) {
         this.#setID(crypto.randomUUID());
-        this.title = title;
-        this.description = description;
+        this.title = sanitize(title);
+        this.description = sanitize(description);
         this.dueDate = dueDate;
         this.priority = priority;
         this.completed = false;
@@ -21,8 +27,8 @@ export class TodoItem {
     }
 
     update(title, description, dueDate) {
-        this.title = title;
-        this.description = description;
+        this.title = sanitize(title);
+        this.description = sanitize(description);
         this.dueDate = dueDate;
     }
 
