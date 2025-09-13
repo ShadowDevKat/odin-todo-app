@@ -49,10 +49,6 @@ class TodoList {
         this.listName = sanitize(name);
     }
 
-    editItem(index, title, description = "", dueDate = null, priority = levels.LOW) {
-        this.items[index].update(title, description, dueDate, priority);
-    }
-
     getItem(index) {
         return this.items[index] || null;
     }
@@ -72,19 +68,39 @@ export class ProjectManager {
         this.projects.push(new TodoList(name));
     }
 
-    removeList(index) {
-        this.projects.splice(index, 1);
+    removeList(projectIndex) {
+        this.projects.splice(projectIndex, 1);
     }
 
-    getList(index = 0) {
-        return this.projects[index] || null;
+    getList(projectIndex) {
+        return this.projects[projectIndex] || null;
     }
 
     getAllLists() {
         return this.projects;
     }
 
+    getListItem(projectIndex, itemIndex) {
+        return this.projects[projectIndex].getItem(itemIndex);
+    }
+
+    getItemsFromProject(projectIndex) {
+        const project = this.getList(projectIndex);
+        if (!project) return [];
+        return project.getAll().map((item, itemIndex) => ({
+            item,
+            projectIndex,
+            itemIndex,
+        }));
+    }
+
     getAllItems() {
-        return this.projects.flatMap(list => list.getAll());
+        return this.projects.flatMap((list, projectIndex) =>
+            list.getAll().map((item, itemIndex) => ({
+                item,
+                projectIndex,
+                itemIndex,
+            }))
+        );
     }
 }

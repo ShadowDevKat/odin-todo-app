@@ -69,9 +69,22 @@ header {
     font-size: 1.5rem;
 }
 
+.side-bar button {
+    font-size: 1rem;
+}
+
 .projects-list {
     margin-top: 1rem;
     padding-left: 2rem;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.controls>button {
+    flex: 1;
 }
 
 #main-container {

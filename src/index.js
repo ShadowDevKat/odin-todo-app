@@ -4,16 +4,21 @@ import { renderTodos, bindEvents, renderProjects } from "./modules/display";
 
 export const contentDiv = document.querySelector("#main-container");
 export const projectsLi = document.querySelector(".projects-list")
-const addBtn = document.querySelector("#add-btn");
+const addProjectBtn = document.querySelector("#add-project-btn");
+const addItemBtn = document.querySelector("#add-item-btn");
+const allBtn = document.querySelector("#all-btn");
 
 // Create Project Manager
 const projectManager = new ProjectManager();
 
 // Create lists
 projectManager.addTodoList("Home");
-projectManager.addTodoList("Work");
 
-// Add todos
+// test todos
+projectManager.getList(0).add("Do laundry", "Wash and fold clothes");
+projectManager.getList(1).add("Finish report", "Due tomorrow", "2025-09-15");
+projectManager.getList(0).add("Do laundry", "Wash and fold clothes");
+projectManager.getList(1).add("Finish report", "Due tomorrow", "2025-09-15");
 projectManager.getList(0).add("Do laundry", "Wash and fold clothes");
 projectManager.getList(1).add("Finish report", "Due tomorrow", "2025-09-15");
 
@@ -21,50 +26,71 @@ projectManager.getList(1).add("Finish report", "Due tomorrow", "2025-09-15");
 renderProjects(projectManager.getAllLists());
 renderTodos(projectManager.getAllItems());
 
-// const todoList = new TodoList();
+let currentProjectIndex = null;
 
-// renderTodos(todoList.getAll());
+bindEvents({
+    onProjectChange: (projectIndex) => {
+        currentProjectIndex = projectIndex;
+        renderTodos(projectManager.getItemsFromProject(projectIndex));
+    },
+    onDelete: (projectIndex, itemIndex) => {
+        projectManager.getList(projectIndex).remove(itemIndex);
+        refreshDOM();
+    },
+    onToggle: (projectIndex, itemIndex) => {
+        projectManager.getListItem(projectIndex, itemIndex).toggleComplete();
+        refreshDOM();
+    },
+    onEdit: (projectIndex, itemIndex) => {
+        const todo = projectManager.getListItem(projectIndex, itemIndex);
 
-// bindEvents({
-//     onDelete: (index) => {
-//         todoList.remove(index);
-//         renderTodos(todoList.getAll());
-//     },
-//     onToggle: (index) => {
-//         todoList.getAll()[index].toggleComplete();
-//         renderTodos(todoList.getAll());
-//     },
-//     onEdit: (index) => {
-//         const todo = todoList.getAll()[index];
-//         const newTitle = prompt("Edit title:", todo.title);
-//         const newDescription = prompt("Edit description:", todo.description);
-//         const newDueDate = prompt("Edit due date:", todo.dueDate);
+        if (!todo) return;
 
-//         if (newTitle !== null) {
-//             todoList.edit(index, newTitle, newDescription, newDueDate);
-//             renderTodos(todoList.getAll());
-//         }
-//     }
-// });
+        const newTitle = prompt("Edit title:", todo.title);
+        if (newTitle === null) return;
 
-// addBtn.addEventListener("click", () => {
-//     const title = prompt("Enter task title:");
-//     if (!title) return;
+        const newDescription = prompt("Edit description:", todo.description) || "";
+        const newDueDate = prompt("Edit due date:", todo.dueDate) || null;
+        const newPriority = prompt("Edit priority (Low, Medium, High):", todo.priority) || todo.priority;
 
-//     const description = prompt("Enter task description:") || "";
-//     const dueDate = prompt("Enter due date:") || "";
+        todo.update(newTitle, newDescription, newDueDate, newPriority);
+        refreshDOM();
+    }
+});
 
-//     todoList.add(new TodoItem(title, description, dueDate));
-//     renderTodos(todoList.getAll());
-// });
+function refreshDOM() {
+    renderProjects(projectManager.getAllLists());
+    if (currentProjectIndex === null) {
+        renderTodos(projectManager.getAllItems());
+    }
+    else {
+        renderTodos(projectManager.getItemsFromProject(currentProjectIndex));
+    }
+}
 
-// todoList.add(new TodoItem("Finish project", "Work on ToDo app", "2025-09-15", levels.HIGH));
-// todoList.add(new TodoItem("Grocery shopping", "Buy eggs, milk, and bread", "2025-09-13", levels.LOW));
-// todoList.add(new TodoItem("Gym", "Leg day workout", "2025-09-12", levels.MEDIUM));
-// todoList.add(new TodoItem("Finish project", "Work on ToDo app", "2025-09-15", levels.HIGH));
-// todoList.add(new TodoItem("Grocery shopping", "Buy eggs, milk, and bread", "2025-09-13", levels.LOW));
-// todoList.add(new TodoItem("Gym", "Leg day workout", "2025-09-12", levels.MEDIUM));
-// todoList.add(new TodoItem("Finish project", "Work on ToDo app", "2025-09-15", levels.HIGH));
-// todoList.add(new TodoItem("Grocery shopping", "Buy eggs, milk, and bread", "2025-09-13", levels.LOW));
-// todoList.add(new TodoItem("Gym", "Leg day workout", "2025-09-12", levels.MEDIUM));
-// renderTodos(todoList.getAll());
+
+allBtn.addEventListener("click", () => {
+    renderTodos(projectManager.getAllItems());
+    currentProjectIndex = null;
+});
+
+addProjectBtn.addEventListener("click", () => {
+    const projectName = prompt("Enter project name:");
+    if (!projectName) return;
+
+    projectManager.addTodoList(projectName);
+    refreshDOM();
+});
+
+addItemBtn.addEventListener("click", () => {
+    if(currentProjectIndex === null) return;
+    const title = prompt("Enter task title:");
+    if (!title) return;
+
+    const description = prompt("Enter task description:") || "";
+    const dueDate = prompt("Enter due date:") || "";
+    const priority = prompt("Enter priority:") || "";
+
+    projectManager.getList(currentProjectIndex).add(title, description, dueDate, priority);
+    refreshDOM();
+});
