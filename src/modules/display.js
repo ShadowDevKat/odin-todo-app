@@ -1,4 +1,15 @@
-import { contentDiv } from "..";
+import { contentDiv, projectsLi } from "..";
+
+export function renderProjects(projects) {
+    projectsLi.innerHTML = "";
+
+    projects.forEach((project, index) => {
+        const projectBtn = document.createElement("button");
+        projectBtn.textContent = `${project.listName}`
+        projectBtn.dataset.projectIndex = index;
+        projectsLi.appendChild(projectBtn);
+    });
+}
 
 export function renderTodos(todos) {
     contentDiv.innerHTML = "";

@@ -10,11 +10,8 @@ function sanitize(input) {
     return input.replace(/<\/?[^>]+(>|$)/g, "");
 }
 
-export class TodoItem {
-    #id;
-
-    constructor(title, description = "", dueDate = null, priority = levels.LOW) {
-        this.#setID(crypto.randomUUID());
+class TodoItem {
+    constructor(title, description, dueDate, priority) {
         this.title = sanitize(title);
         this.description = sanitize(description);
         this.dueDate = dueDate;
@@ -26,39 +23,68 @@ export class TodoItem {
         this.completed = !this.completed;
     }
 
-    update(title, description, dueDate) {
+    update(title, description, dueDate, priority) {
         this.title = sanitize(title);
         this.description = sanitize(description);
         this.dueDate = dueDate;
-    }
-
-    get id() {
-        return this.#id;
-    }
-
-    #setID(value) {
-        this.#id = value;
+        this.priority = priority;
     }
 }
 
-export class TodoList {
-    constructor() {
-        this.todos = [];
+class TodoList {
+    constructor(name) {
+        this.listName = sanitize(name);
+        this.items = [];
     }
 
-    add(todo) {
-        this.todos.push(todo);
+    add(title, description = "", dueDate = null, priority = levels.LOW) {
+        this.items.push(new TodoItem(title, description, dueDate, priority));
     }
 
     remove(index) {
-        this.todos.splice(index, 1);
+        this.items.splice(index, 1);
     }
 
-    edit(index, title, description, dueDate) {
-        this.todos[index].update(title, description, dueDate);
+    editList(name) {
+        this.listName = sanitize(name);
+    }
+
+    editItem(index, title, description = "", dueDate = null, priority = levels.LOW) {
+        this.items[index].update(title, description, dueDate, priority);
+    }
+
+    getItem(index) {
+        return this.items[index] || null;
     }
 
     getAll() {
-        return this.todos;
+        return this.items;
+    }
+}
+
+export class ProjectManager {
+    constructor() {
+        this.projects = [];
+        this.addTodoList("Default");
+    }
+
+    addTodoList(name) {
+        this.projects.push(new TodoList(name));
+    }
+
+    removeList(index) {
+        this.projects.splice(index, 1);
+    }
+
+    getList(index = 0) {
+        return this.projects[index] || null;
+    }
+
+    getAllLists() {
+        return this.projects;
+    }
+
+    getAllItems() {
+        return this.projects.flatMap(list => list.getAll());
     }
 }
