@@ -69,7 +69,7 @@ export function renderProjects(projects) {
 
     const allProjectsBtn = document.createElement("div");
     allProjectsBtn.innerHTML = `
-        <div data-project-index="null" id="project-btn">
+        <div data-project-index="" id="project-btn">
             <img class="icon" src=${listIcon} alt="list-icon">
             <p>All</p>
         </div>
@@ -127,7 +127,12 @@ export function refreshDOM(projectManager, currentProject) {
     }
 }
 
+let projectChangeEvent = null;
+let previousSelection = null;
+
 export function bindProjectEvents({ onProjectChange, onEdit, onDelete }) {
+    projectChangeEvent = onProjectChange;
+
     projectsLi.addEventListener("click", (e) => {
         let projectIndex = null;
         const targetID = e.target.id;
@@ -135,7 +140,7 @@ export function bindProjectEvents({ onProjectChange, onEdit, onDelete }) {
         switch (targetID) {
             case "project-btn":
                 projectIndex = e.target.dataset.projectIndex;
-                onProjectChange(projectIndex);
+                selectProject(e.target, projectIndex);
                 break;
             case "project-edit-btn":
                 projectIndex = e.target.parentElement.dataset.projectIndex;
@@ -149,6 +154,31 @@ export function bindProjectEvents({ onProjectChange, onEdit, onDelete }) {
                 break;
         }
     });
+}
+
+function selectProject(target, projectIndex) {
+    if (previousSelection) {
+        previousSelection.classList.remove("selected-project");
+    }
+    target.classList.add("selected-project");
+    previousSelection = target;
+
+    if (projectChangeEvent) {
+        projectChangeEvent(projectIndex);
+    }
+}
+
+export function triggerProjectChange(projectIndex) {
+    const btn = projectsLi.querySelector(
+        `[data-project-index="${projectIndex}"][id="project-btn"]`
+    );
+
+    if (btn) {
+        selectProject(btn, projectIndex);
+    }
+    else if (projectChangeEvent) {
+        projectChangeEvent(projectIndex);
+    }
 }
 
 export function bindTodoEvents({ onView, onDelete, onToggle, onEdit }) {

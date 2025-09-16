@@ -12,7 +12,8 @@ import {
     hideModal,
     bindProjectEvents,
     bindTodoEvents,
-    showProjectEdit
+    showProjectEdit,
+    triggerProjectChange
 } from "./modules/display";
 
 export const contentDiv = document.querySelector("#main-container");
@@ -32,9 +33,6 @@ let currentItem = null;
 const projectManager = new ProjectManager();
 loadData();
 
-// Render
-refreshDOM(projectManager, currentProject);
-
 // Bind events
 onModalClose(() => {
     currentItem = null;
@@ -42,12 +40,12 @@ onModalClose(() => {
 
 bindProjectEvents({
     onProjectChange: (projectIndex) => {
-        currentProject = projectIndex;
-        if (currentProject === "null") {
+        if (!projectIndex) {
             currentProject = null;
             renderTodos(projectManager.getAllItems());
         }
         else {
+            currentProject = projectIndex;
             renderTodos(projectManager.getItemsFromProject(projectIndex));
         }
     },
@@ -159,6 +157,17 @@ editProjectForm.addEventListener("submit", (e) => {
     refreshDOM(projectManager, currentProject);
 });
 
+document.addEventListener("keydown", (e) => {
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        hideModal();
+    }
+});
+
+// Initial Render
+refreshDOM(projectManager, currentProject);
+triggerProjectChange("");
+
 function formatDateToDMY(rawDate) {
     if (!rawDate) return null;
     const dateObj = parseISO(rawDate);
@@ -196,13 +205,6 @@ function setItemFormData(form, todo) {
         if (field) field.value = value;
     }
 }
-
-document.addEventListener("keydown", (e) => {
-    if (e.key === 'Escape') {
-        e.preventDefault();
-        hideModal();
-    }
-});
 
 function loadData() {
     if (projectManager.isStorageEmpty()) {
