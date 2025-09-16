@@ -2,9 +2,9 @@ import "./styles.css";
 import { format, parse, parseISO } from "date-fns";
 import { levels, ProjectManager } from "./modules/todo";
 import {
-    renderTodos,
+    //renderTodos,
     onModalClose,
-    refreshDOM,
+    //refreshDOM,
     showItemView,
     showItemEdit,
     showProjectAdd,
@@ -42,11 +42,11 @@ bindProjectEvents({
     onProjectChange: (projectIndex) => {
         if (!projectIndex) {
             currentProject = null;
-            renderTodos(projectManager.getAllItems());
+            //renderTodos(projectManager.getAllItems());
         }
         else {
             currentProject = projectIndex;
-            renderTodos(projectManager.getItemsFromProject(projectIndex));
+            //renderTodos(projectManager.getItemsFromProject(projectIndex));
         }
     },
     onEdit: (projectIndex) => {
@@ -60,7 +60,7 @@ bindProjectEvents({
         projectManager.removeProject(projectIndex);
         projectManager.save();
         currentProject = null;
-        refreshDOM(projectManager, currentProject);
+        //refreshDOM(projectManager, currentProject);
     }
 });
 
@@ -71,12 +71,12 @@ bindTodoEvents({
     onDelete: (projectIndex, itemIndex) => {
         projectManager.getProject(projectIndex).removeItem(itemIndex);
         projectManager.save();
-        refreshDOM(projectManager, currentProject);
+        //refreshDOM(projectManager, currentProject);
     },
     onToggle: (projectIndex, itemIndex) => {
         projectManager.getProjectItem(projectIndex, itemIndex).toggleComplete();
         projectManager.save();
-        refreshDOM(projectManager, currentProject);
+        //refreshDOM(projectManager, currentProject);
     },
     onEdit: (projectIndex, itemIndex) => {
         const todo = projectManager.getProjectItem(projectIndex, itemIndex);
@@ -106,7 +106,7 @@ addItemForm.addEventListener("submit", (e) => {
 
     addItemForm.reset();
     hideModal();
-    refreshDOM(projectManager, currentProject);
+    //refreshDOM(projectManager, currentProject);
 });
 
 editItemForm.addEventListener("submit", (e) => {
@@ -127,7 +127,7 @@ editItemForm.addEventListener("submit", (e) => {
 
     editItemForm.reset();
     hideModal();
-    refreshDOM(projectManager, currentProject);
+    //refreshDOM(projectManager, currentProject);
 });
 
 addProjectForm.addEventListener("submit", (e) => {
@@ -139,7 +139,7 @@ addProjectForm.addEventListener("submit", (e) => {
 
     addProjectForm.reset();
     hideModal();
-    refreshDOM(projectManager, currentProject);
+    //refreshDOM(projectManager, currentProject);
 });
 
 editProjectForm.addEventListener("submit", (e) => {
@@ -154,7 +154,7 @@ editProjectForm.addEventListener("submit", (e) => {
 
     editProjectForm.reset();
     hideModal();
-    refreshDOM(projectManager, currentProject);
+    //refreshDOM(projectManager, currentProject);
 });
 
 document.addEventListener("keydown", (e) => {
@@ -165,7 +165,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 // Initial Render
-refreshDOM(projectManager, currentProject);
+//refreshDOM(projectManager, currentProject);
 triggerProjectChange("");
 
 function formatDateToDMY(rawDate) {
@@ -248,5 +248,5 @@ window.clearData = clearData;
 function clearData() {
     projectManager.clearStorage();
     loadData();
-    refreshDOM(projectManager, currentProject);
+    //refreshDOM(projectManager, currentProject);
 }
