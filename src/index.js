@@ -1,6 +1,6 @@
 import "./styles.css";
 import { levels, ProjectManager } from "./modules/todo";
-import { renderTodos, bindEvents, renderProjects } from "./modules/display";
+import { renderTodos, bindEvents, renderProjects, showItemView, showItemEdit, showProjectAdd, showItemAdd } from "./modules/display";
 
 export const contentDiv = document.querySelector("#main-container");
 export const projectsLi = document.querySelector(".projects-list")
@@ -33,6 +33,10 @@ bindEvents({
         currentProjectIndex = projectIndex;
         renderTodos(projectManager.getItemsFromProject(projectIndex));
     },
+    onView: (projectIndex, itemIndex) => {
+        // Handle view
+        showItemView(projectManager.getListItem(projectIndex, itemIndex));
+    },
     onDelete: (projectIndex, itemIndex) => {
         projectManager.getList(projectIndex).remove(itemIndex);
         refreshDOM();
@@ -42,19 +46,20 @@ bindEvents({
         refreshDOM();
     },
     onEdit: (projectIndex, itemIndex) => {
-        const todo = projectManager.getListItem(projectIndex, itemIndex);
+        showItemEdit();
+        // const todo = projectManager.getListItem(projectIndex, itemIndex);
 
-        if (!todo) return;
+        // if (!todo) return;
 
-        const newTitle = prompt("Edit title:", todo.title);
-        if (newTitle === null) return;
+        // const newTitle = prompt("Edit title:", todo.title);
+        // if (newTitle === null) return;
 
-        const newDescription = prompt("Edit description:", todo.description) || "";
-        const newDueDate = prompt("Edit due date:", todo.dueDate) || null;
-        const newPriority = prompt("Edit priority (Low, Medium, High):", todo.priority) || todo.priority;
+        // const newDescription = prompt("Edit description:", todo.description) || "";
+        // const newDueDate = prompt("Edit due date:", todo.dueDate) || null;
+        // const newPriority = prompt("Edit priority (Low, Medium, High):", todo.priority) || todo.priority;
 
-        todo.update(newTitle, newDescription, newDueDate, newPriority);
-        refreshDOM();
+        // todo.update(newTitle, newDescription, newDueDate, newPriority);
+        // refreshDOM();
     }
 });
 
@@ -75,22 +80,26 @@ allBtn.addEventListener("click", () => {
 });
 
 addProjectBtn.addEventListener("click", () => {
-    const projectName = prompt("Enter project name:");
-    if (!projectName) return;
+    // const projectName = prompt("Enter project name:");
+    // if (!projectName) return;
 
-    projectManager.addTodoList(projectName);
-    refreshDOM();
+    // projectManager.addTodoList(projectName);
+    // refreshDOM();
+    showProjectAdd();
 });
 
 addItemBtn.addEventListener("click", () => {
-    if(currentProjectIndex === null) return;
-    const title = prompt("Enter task title:");
-    if (!title) return;
+    // if (currentProjectIndex === null) return;
+    // const title = prompt("Enter task title:");
+    // if (!title) return;
 
-    const description = prompt("Enter task description:") || "";
-    const dueDate = prompt("Enter due date:") || "";
-    const priority = prompt("Enter priority:") || "";
+    // const description = prompt("Enter task description:") || "";
+    // const dueDate = prompt("Enter due date:") || "";
+    // const priority = prompt("Enter priority:") || "";
 
-    projectManager.getList(currentProjectIndex).add(title, description, dueDate, priority);
-    refreshDOM();
+    // projectManager.getList(currentProjectIndex).add(title, description, dueDate, priority);
+    // refreshDOM();
+    showItemAdd();
 });
+
+// showItemView();
