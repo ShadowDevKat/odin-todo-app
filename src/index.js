@@ -1,7 +1,19 @@
 import "./styles.css";
 import { format, parse, parseISO } from "date-fns";
 import { levels, ProjectManager } from "./modules/todo";
-import { renderTodos, bindEvents, renderProjects, showItemView, showItemEdit, showProjectAdd, showItemAdd, hideModal } from "./modules/display";
+import {
+    renderTodos,
+    onModalClose,
+    refreshDOM,
+    renderProjects,
+    showItemView,
+    showItemEdit,
+    showProjectAdd,
+    showItemAdd,
+    hideModal,
+    bindProjectEvents,
+    bindTodoEvents
+} from "./modules/display";
 
 export const contentDiv = document.querySelector("#main-container");
 export const projectsLi = document.querySelector(".projects-list")
@@ -50,21 +62,29 @@ renderTodos(projectManager.getAllItems());
 let currentProject = null;
 let currentItem = null;
 
-bindEvents({
+// Bind events
+onModalClose(() => {
+    currentItem = null;
+});
+
+bindProjectEvents({
     onProjectChange: (projectIndex) => {
         currentProject = projectIndex;
         renderTodos(projectManager.getItemsFromProject(projectIndex));
-    },
+    }
+});
+
+bindTodoEvents({
     onView: (projectIndex, itemIndex) => {
         showItemView(projectManager.getProjectItem(projectIndex, itemIndex));
     },
     onDelete: (projectIndex, itemIndex) => {
         projectManager.getProject(projectIndex).removeItem(itemIndex);
-        refreshDOM();
+        refreshDOM(projectManager, currentProject);
     },
     onToggle: (projectIndex, itemIndex) => {
         projectManager.getProjectItem(projectIndex, itemIndex).toggleComplete();
-        refreshDOM();
+        refreshDOM(projectManager, currentProject);
     },
     onEdit: (projectIndex, itemIndex) => {
         const todo = projectManager.getProjectItem(projectIndex, itemIndex);
@@ -75,15 +95,6 @@ bindEvents({
     }
 });
 
-function refreshDOM() {
-    renderProjects(projectManager.getAllProjects());
-    if (currentProject === null) {
-        renderTodos(projectManager.getAllItems());
-    }
-    else {
-        renderTodos(projectManager.getItemsFromProject(currentProject));
-    }
-}
 
 
 allBtn.addEventListener("click", () => {
@@ -97,7 +108,7 @@ addProjectBtn.addEventListener("click", () => {
 });
 
 addItemBtn.addEventListener("click", () => {
-    if(currentProject === null) return;
+    if (currentProject === null) return;
     addItemForm.reset();
     showItemAdd();
 });
@@ -108,8 +119,7 @@ addItemForm.addEventListener("submit", (e) => {
     projectManager.getProject(currentProject).addItem(title, description, dueDate, priority);
     addItemForm.reset();
     hideModal();
-    currentItem = null;
-    refreshDOM();
+    refreshDOM(projectManager, currentProject);
 });
 
 addProjectForm.addEventListener("submit", (e) => {
@@ -119,8 +129,7 @@ addProjectForm.addEventListener("submit", (e) => {
     projectManager.addProject(title);
     addProjectForm.reset();
     hideModal();
-    currentItem = null;
-    refreshDOM();
+    refreshDOM(projectManager, currentProject);
 });
 
 editItemForm.addEventListener("submit", (e) => {
@@ -140,8 +149,7 @@ editItemForm.addEventListener("submit", (e) => {
 
     editItemForm.reset();
     hideModal();
-    currentItem = null;
-    refreshDOM();
+    refreshDOM(projectManager, currentProject);
 });
 
 function formatDateToDMY(rawDate) {
@@ -182,11 +190,9 @@ function setFormData(form, todo) {
     }
 }
 
-
 document.addEventListener("keydown", (e) => {
     if (e.key === 'Escape') {
         e.preventDefault();
         hideModal();
-        currentItem = null;
     }
 })

@@ -43,10 +43,18 @@ function showModal(modal) {
     activeModal = modal;
     modal.style.display = "flex";
 }
+
+let onCloseCallbacks = [];
+
+export function onModalClose(callback) {
+    onCloseCallbacks.push(callback);
+}
+
 export function hideModal() {
     if (activeModal === null) return;
     activeModal.style.display = "none";
     activeModal = null;
+    onCloseCallbacks.forEach(cb => cb());
 }
 
 export function renderProjects(projects) {
@@ -56,7 +64,8 @@ export function renderProjects(projects) {
         const projectBtn = document.createElement("button");
         projectBtn.textContent = `${project.listName}`;
         projectBtn.dataset.projectIndex = `${index}`;
-        projectBtn.classList.add("btn", "full-btn", "project-btn");
+        projectBtn.classList.add("btn", "full-btn");
+        projectBtn.id = "project-btn"
         projectsLi.appendChild(projectBtn);
     });
 }
@@ -77,10 +86,10 @@ export function renderTodos(todos) {
                 <p>Completed: ${item.completed ? "Yes" : "No"}</p>
             </div>
             <div class="button-container">
-                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn view-btn">View</button>
-                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn delete-btn">Delete</button>
-                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn toggle-btn">Toggle</button>
-                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn edit-btn">Edit</button>
+                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn" id="view-btn">View</button>
+                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn" id="delete-btn">Delete</button>
+                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn" id="toggle-btn">Toggle</button>
+                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn" id="edit-btn">Edit</button>
             </div>
         `;
 
@@ -88,28 +97,45 @@ export function renderTodos(todos) {
     });
 }
 
+export function refreshDOM(projectManager, currentProject) {
+    renderProjects(projectManager.getAllProjects());
+    if (currentProject === null) {
+        renderTodos(projectManager.getAllItems());
+    }
+    else {
+        renderTodos(projectManager.getItemsFromProject(currentProject));
+    }
+}
 
-export function bindEvents({ onProjectChange, onView, onDelete, onToggle, onEdit }) {
+export function bindProjectEvents({ onProjectChange }) {
     projectsLi.addEventListener("click", (e) => {
+        if (!e.target.id === "project-btn") return;
         const projectIndex = e.target.dataset.projectIndex;
-        if (e.target.classList.contains("project-btn")) {
-            onProjectChange(projectIndex);
-        }
+        onProjectChange(projectIndex);
     });
+}
+
+export function bindTodoEvents({ onView, onDelete, onToggle, onEdit }) {
     contentDiv.addEventListener("click", (e) => {
         const projectIndex = e.target.dataset.projectIndex;
         const itemIndex = e.target.dataset.itemIndex;
-        if (e.target.classList.contains("view-btn")) {
-            onView(projectIndex, itemIndex);
-        }
-        if (e.target.classList.contains("delete-btn")) {
-            onDelete(projectIndex, itemIndex);
-        }
-        if (e.target.classList.contains("toggle-btn")) {
-            onToggle(projectIndex, itemIndex);
-        }
-        if (e.target.classList.contains("edit-btn")) {
-            onEdit(projectIndex, itemIndex);
+        const targetID = e.target.id;
+
+        switch (targetID) {
+            case "view-btn":
+                onView(projectIndex, itemIndex);
+                break;
+            case "delete-btn":
+                onDelete(projectIndex, itemIndex);
+                break;
+            case "toggle-btn":
+                onToggle(projectIndex, itemIndex);
+                break;
+            case "edit-btn":
+                onEdit(projectIndex, itemIndex);
+                break;
+            default:
+                break;
         }
     });
 }
