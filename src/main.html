@@ -31,29 +31,29 @@
                 <h1>New ToDo</h1>
                 <button type="button" class="btn close-btn">X</button>
             </div>
-            
-            <form method="dialog">
+
+            <form method="dialog" id="add-book-form">
                 <div class="form-group">
                     <label for="title">Title:</label>
-                    <input type="text" id="title" required>
+                    <input type="text" name="title" id="title" required>
                 </div>
 
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <textarea id="description" rows="5"></textarea>
+                    <textarea name="description" id="description" rows="5"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="duedate">Due Date:</label>
-                    <input type="date" id="duedate" required>
+                    <input type="date" name="duedate" id="duedate" required>
                 </div>
 
                 <div class="form-group">
                     <label for="priority">Priority:</label>
-                    <select id="priority">
-                        <option value="LOW" selected>Low</option>
-                        <option value="MEDIUM">Medium</option>
-                        <option value="HIGH">High</option>
+                    <select name="priority" id="priority">
+                        <option value="Low" selected>Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
                     </select>
                 </div>
 

@@ -37,6 +37,10 @@ class TodoList {
         this.items = [];
     }
 
+    add({ title, description, dueDate, priority}) {
+        this.items.push(new TodoItem(title, description, dueDate, priority));
+    }
+
     add(title, description = "", dueDate = null, priority = levels.LOW) {
         this.items.push(new TodoItem(title, description, dueDate, priority));
     }

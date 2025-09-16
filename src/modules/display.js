@@ -43,7 +43,7 @@ function showModal(modal) {
     activeModal = modal;
     modal.style.display = "flex";
 }
-function hideModal() {
+export function hideModal() {
     if (activeModal === null) return;
     activeModal.style.display = "none";
     activeModal = null;
@@ -64,7 +64,7 @@ export function renderProjects(projects) {
 export function renderTodos(todos) {
     contentDiv.innerHTML = "";
 
-    todos.forEach(({ item, projectIndex, itemIndex }) => {
+    [...todos].reverse().forEach(({ item, projectIndex, itemIndex }) => {
         const todoDiv = document.createElement("div");
         todoDiv.classList.add("todo-item");
 

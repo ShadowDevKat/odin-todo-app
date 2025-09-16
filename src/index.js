@@ -1,12 +1,15 @@
 import "./styles.css";
+import { format, parseISO } from "date-fns";
 import { levels, ProjectManager } from "./modules/todo";
-import { renderTodos, bindEvents, renderProjects, showItemView, showItemEdit, showProjectAdd, showItemAdd } from "./modules/display";
+import { renderTodos, bindEvents, renderProjects, showItemView, showItemEdit, showProjectAdd, showItemAdd, hideModal } from "./modules/display";
 
 export const contentDiv = document.querySelector("#main-container");
 export const projectsLi = document.querySelector(".projects-list")
 const addProjectBtn = document.querySelector("#add-project-btn");
 const addItemBtn = document.querySelector("#add-item-btn");
 const allBtn = document.querySelector("#all-btn");
+
+const addItemForm = document.querySelector("#add-book-form");
 
 // Create Project Manager
 const projectManager = new ProjectManager();
@@ -102,19 +105,28 @@ addItemBtn.addEventListener("click", () => {
     showItemAdd();
 });
 
-// showItemView();
+addItemForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const { title, description, dueDate, priority } = getFormData(addItemForm);
+    projectManager.getList(currentProjectIndex).add(title, description, dueDate, priority);
+    addItemForm.reset();
+    hideModal();
+    refreshDOM();
+});
 
-// bookForm.addEventListener("submit", (e) => {
-//     e.preventDefault();
+function getFormData(form) {
+    const formData = new FormData(addItemForm);
 
-//     const title = bookForm.querySelector("#title").value;
-//     const author = bookForm.querySelector("#author").value;
-//     const pages = bookForm.querySelector("#pages").value;
-//     const isRead = bookForm.querySelector("#read").checked;
-
-//     addBookToLibrary(title, author, pages, isRead);
-//     createBookDisplay(myLibrary.at(-1));
-
-//     bookForm.reset();
-//     dialogElement.close();
-// });
+    let rawDate = formData.get("duedate");
+    let formattedDate = null;
+    if (rawDate) {
+        const dateObj = parseISO(rawDate);
+        formattedDate = format(dateObj, "dd-MM-yyyy");
+    }
+    return {
+        title: formData.get("title"),
+        description: formData.get("description"),
+        dueDate: formattedDate,
+        priority: formData.get("priority")
+    };
+}
