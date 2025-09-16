@@ -37,7 +37,7 @@ class TodoList {
         this.items = [];
     }
 
-    addItem({ title, description, dueDate, priority}) {
+    addItem({ title, description, dueDate, priority }) {
         this.items.push(new TodoItem(title, description, dueDate, priority));
     }
 
@@ -45,9 +45,9 @@ class TodoList {
         this.items.push(new TodoItem(title, description, dueDate, priority));
     }
 
-    editItem(index, { title, description, dueDate, priority}) {
+    editItem(index, { title, description, dueDate, priority }) {
         const item = this.getItem(index);
-        if(!item) return;
+        if (!item) return;
         item.update(title, description, dueDate, priority);
     }
 

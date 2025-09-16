@@ -306,8 +306,17 @@ textarea {
     transform: scale(0.9);
 }
 
-.icon {
+.icon,
+.icon-large {
     filter: var(--filter-white);
+}
+
+.icon {
     width: 1.5rem;
     height: 1.5rem;
+}
+
+.icon-large {
+    width: 3rem;
+    height: 3rem;
 }

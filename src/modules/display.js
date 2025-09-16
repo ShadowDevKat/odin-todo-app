@@ -8,7 +8,7 @@ const itemEditModal = document.getElementById("item-edit");
 const itemAddModal = document.getElementById("item-add");
 const projectAddModal = document.getElementById("project-add");
 const projectEditModal = document.getElementById("project-edit");
-const viewCloseBtn = document.querySelectorAll(".close-btn");
+const viewCloseBtn = document.querySelectorAll("#close-btn");
 
 let activeModal = null;
 
