@@ -10,7 +10,10 @@
 <body>
     <div class="modal" id="item-view">
         <div class="modal-content">
-            <div class="close">X</div>
+            <div class="modal-header">
+                <h1>ToDo</h1>
+                <button type="button" class="btn close-btn">X</button>
+            </div>
             <div class="modal-detail">
                 <!-- <h2>Title:</h3>
                 <p>Description:</p>
@@ -21,21 +24,56 @@
             </div>
         </div>
     </div>
+
     <div class="modal" id="item-add">
         <div class="modal-content">
-            <span class="close">X</span>
-            <p>Add Item</p>
+            <div class="modal-header">
+                <h1>New ToDo</h1>
+                <button type="button" class="btn close-btn">X</button>
+            </div>
+            
+            <form method="dialog">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" rows="5"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="duedate">Due Date:</label>
+                    <input type="date" id="duedate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="priority">Priority:</label>
+                    <select id="priority">
+                        <option value="LOW" selected>Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+                    </select>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn default-btn">Add</button>
+                </div>
+            </form>
         </div>
     </div>
+
     <div class="modal" id="project-add">
         <div class="modal-content">
-            <span class="close">X</span>
+            <button class="btn close-btn">X</button>
             <p>Add Project</p>
         </div>
     </div>
+
     <div class="modal" id="item-edit">
         <div class="modal-content">
-            <span class="close">X</span>
+            <button class="btn close-btn">X</button>
             <p>Edit Item</p>
         </div>
     </div>
@@ -46,21 +84,21 @@
         </header>
         <nav class="side-bar">
             <ul class="main-list">
-                <button id="all-btn">All</button>
-                <li>Today</li>
-                <li>Week</li>
+                <button class="btn full-btn" id="all-btn">All</button>
+                <!-- <li>Today</li>
+                <li>Week</li> -->
                 <li>
                     Projects
                     <ul class="projects-list">
-                        <button>P1</button>
+                        <!-- <button>P1</button>
                         <button>P2</button>
-                        <button>P3</button>
+                        <button>P3</button> -->
                     </ul>
                 </li>
             </ul>
             <div class="controls">
-                <button id="add-project-btn">Add Project</button>
-                <button id="add-item-btn">Add Item</button>
+                <button class="btn full-btn" id="add-project-btn">Add Project</button>
+                <button class="btn full-btn" id="add-item-btn">Add Item</button>
             </div>
         </nav>
         <div id="main-container">

@@ -4,29 +4,20 @@ const itemViewModal = document.getElementById("item-view");
 const itemEditModal = document.getElementById("item-edit");
 const itemAddModal = document.getElementById("item-add");
 const projectAddModal = document.getElementById("project-add");
-const viewCloseBtn = document.querySelectorAll(".close");
+const viewCloseBtn = document.querySelectorAll(".close-btn");
 
 let activeModal = null;
 
 viewCloseBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
-        activeModal.style.display = "none";
-        activeModal = null;
+        hideModal();
     });
 });
 
-window.onclick = function (event) {
-    if (event.target == activeModal) {
-        activeModal.style.display = "none";
-        activeModal = null;
-    }
-}
-
 export function showItemView(item = null) {
-    activeModal = itemViewModal;
-    showModal(activeModal);
-
     if (item === null) return;
+
+    showModal(itemViewModal);
 
     const detailsDiv = activeModal.querySelector(".modal-detail");
     detailsDiv.innerHTML = "";
@@ -39,20 +30,23 @@ export function showItemView(item = null) {
     `;
 }
 export function showItemEdit() {
-    activeModal = itemEditModal;
-    showModal(activeModal);
+    showModal(itemEditModal);
 }
 export function showItemAdd() {
-    activeModal = itemAddModal;
-    showModal(activeModal);
+    showModal(itemAddModal);
 }
 export function showProjectAdd() {
-    activeModal = projectAddModal;
-    showModal(activeModal);
+    showModal(projectAddModal);
 }
 
 function showModal(modal) {
-    modal.style.display = "block";
+    activeModal = modal;
+    modal.style.display = "flex";
+}
+function hideModal() {
+    if (activeModal === null) return;
+    activeModal.style.display = "none";
+    activeModal = null;
 }
 
 export function renderProjects(projects) {
@@ -62,7 +56,7 @@ export function renderProjects(projects) {
         const projectBtn = document.createElement("button");
         projectBtn.textContent = `${project.listName}`;
         projectBtn.dataset.projectIndex = `${index}`;
-        projectBtn.classList.add("project-btn");
+        projectBtn.classList.add("btn", "full-btn", "project-btn");
         projectsLi.appendChild(projectBtn);
     });
 }
@@ -75,16 +69,20 @@ export function renderTodos(todos) {
         todoDiv.classList.add("todo-item");
 
         todoDiv.innerHTML = `
-            <h3>${item.title}</h3>
-            <p>${item.description}</p>
-            <p>Due: ${item.dueDate || "No date"}</p>
-            <p>Priority: ${item.priority}</p>
-            <p>Completed: ${item.completed ? "Yes" : "No"}</p>
-            <p>Project: ${projectIndex}</p>
-            <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="view-btn">View</button>
-            <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="delete-btn">Delete</button>
-            <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="toggle-btn">Toggle</button>
-            <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="edit-btn">Edit</button>
+            <div class="info-container">
+                <h3>${item.title}</h3>
+                <p>${item.description}</p>
+                <p>Due: ${item.dueDate || "No date"}</p>
+                <p>Priority: ${item.priority}</p>
+                <p>Completed: ${item.completed ? "Yes" : "No"}</p>
+                <p>Project: ${projectIndex}</p>
+            </div>
+            <div class="button-container">
+                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn view-btn">View</button>
+                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn delete-btn">Delete</button>
+                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn toggle-btn">Toggle</button>
+                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn edit-btn">Edit</button>
+            </div>
         `;
 
         contentDiv.appendChild(todoDiv);

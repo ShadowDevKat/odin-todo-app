@@ -103,3 +103,18 @@ addItemBtn.addEventListener("click", () => {
 });
 
 // showItemView();
+
+// bookForm.addEventListener("submit", (e) => {
+//     e.preventDefault();
+
+//     const title = bookForm.querySelector("#title").value;
+//     const author = bookForm.querySelector("#author").value;
+//     const pages = bookForm.querySelector("#pages").value;
+//     const isRead = bookForm.querySelector("#read").checked;
+
+//     addBookToLibrary(title, author, pages, isRead);
+//     createBookDisplay(myLibrary.at(-1));
+
+//     bookForm.reset();
+//     dialogElement.close();
+// });
