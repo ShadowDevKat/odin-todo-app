@@ -67,6 +67,15 @@ export function hideModal() {
 export function renderProjects(projects) {
     projectsLi.innerHTML = "";
 
+    const allProjectsBtn = document.createElement("div");
+    allProjectsBtn.innerHTML = `
+        <div data-project-index="null" id="project-btn">
+            <img class="icon" src=${listIcon} alt="list-icon">
+            <p>All</p>
+        </div>
+    `;
+    projectsLi.appendChild(allProjectsBtn);
+
     projects.forEach((project, index) => {
         const projectBtn = document.createElement("div");
         projectBtn.innerHTML = `
@@ -120,7 +129,6 @@ export function refreshDOM(projectManager, currentProject) {
 
 export function bindProjectEvents({ onProjectChange, onEdit, onDelete }) {
     projectsLi.addEventListener("click", (e) => {
-        // if (e.target.id !== "project-btn") return;
         let projectIndex = null;
         const targetID = e.target.id;
 

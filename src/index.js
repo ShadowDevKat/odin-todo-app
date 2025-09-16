@@ -19,7 +19,6 @@ export const contentDiv = document.querySelector("#main-container");
 export const projectsLi = document.querySelector(".projects-list")
 const addProjectBtn = document.querySelector("#add-project-btn");
 const addItemBtn = document.querySelector("#add-item-btn");
-const allBtn = document.querySelector("#all-btn");
 
 const addItemForm = document.querySelector("#add-item-form");
 const addProjectForm = document.querySelector("#add-project-form");
@@ -44,7 +43,13 @@ onModalClose(() => {
 bindProjectEvents({
     onProjectChange: (projectIndex) => {
         currentProject = projectIndex;
-        renderTodos(projectManager.getItemsFromProject(projectIndex));
+        if (currentProject === "null") {
+            currentProject = null;
+            renderTodos(projectManager.getAllItems());
+        }
+        else {
+            renderTodos(projectManager.getItemsFromProject(projectIndex));
+        }
     },
     onEdit: (projectIndex) => {
         currentProject = projectIndex;
@@ -82,11 +87,6 @@ bindTodoEvents({
         setItemFormData(editItemForm, todo);
         showItemEdit();
     }
-});
-
-allBtn.addEventListener("click", () => {
-    renderTodos(projectManager.getAllItems());
-    currentProject = null;
 });
 
 addProjectBtn.addEventListener("click", () => {
