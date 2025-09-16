@@ -32,7 +32,7 @@
                 <button type="button" class="btn close-btn">X</button>
             </div>
 
-            <form method="dialog" id="add-book-form">
+            <form method="dialog" id="add-item-form">
                 <div class="form-group">
                     <label for="title">Title:</label>
                     <input type="text" name="title" id="title" required>
@@ -66,15 +66,60 @@
 
     <div class="modal" id="project-add">
         <div class="modal-content">
-            <button class="btn close-btn">X</button>
-            <p>Add Project</p>
+            <div class="modal-header">
+                <h1>New Project</h1>
+                <button type="button" class="btn close-btn">X</button>
+            </div>
+
+            <form method="dialog" id="add-project-form">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" id="title" required>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn default-btn">Add</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <div class="modal" id="item-edit">
         <div class="modal-content">
-            <button class="btn close-btn">X</button>
-            <p>Edit Item</p>
+            <div class="modal-header">
+                <h1>Edit ToDo</h1>
+                <button type="button" class="btn close-btn">X</button>
+            </div>
+
+            <form method="dialog" id="edit-item-form">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" id="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea name="description" id="description" rows="5"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="duedate">Due Date:</label>
+                    <input type="date" name="duedate" id="duedate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="priority">Priority:</label>
+                    <select name="priority" id="priority">
+                        <option value="Low" selected>Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn default-btn">Confirm</button>
+                </div>
+            </form>
         </div>
     </div>
 

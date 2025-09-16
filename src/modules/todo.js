@@ -37,15 +37,21 @@ class TodoList {
         this.items = [];
     }
 
-    add({ title, description, dueDate, priority}) {
+    addItem({ title, description, dueDate, priority}) {
         this.items.push(new TodoItem(title, description, dueDate, priority));
     }
 
-    add(title, description = "", dueDate = null, priority = levels.LOW) {
+    addItem(title, description = "", dueDate = null, priority = levels.LOW) {
         this.items.push(new TodoItem(title, description, dueDate, priority));
     }
 
-    remove(index) {
+    editItem(index, { title, description, dueDate, priority}) {
+        const item = this.getItem(index);
+        if(!item) return;
+        item.update(title, description, dueDate, priority);
+    }
+
+    removeItem(index) {
         this.items.splice(index, 1);
     }
 
@@ -65,31 +71,31 @@ class TodoList {
 export class ProjectManager {
     constructor() {
         this.projects = [];
-        this.addTodoList("Default");
+        this.addProject("Default");
     }
 
-    addTodoList(name) {
+    addProject(name) {
         this.projects.push(new TodoList(name));
     }
 
-    removeList(projectIndex) {
+    removeProject(projectIndex) {
         this.projects.splice(projectIndex, 1);
     }
 
-    getList(projectIndex) {
+    getProject(projectIndex) {
         return this.projects[projectIndex] || null;
     }
 
-    getAllLists() {
+    getAllProjects() {
         return this.projects;
     }
 
-    getListItem(projectIndex, itemIndex) {
+    getProjectItem(projectIndex, itemIndex) {
         return this.projects[projectIndex].getItem(itemIndex);
     }
 
     getItemsFromProject(projectIndex) {
-        const project = this.getList(projectIndex);
+        const project = this.getProject(projectIndex);
         if (!project) return [];
         return project.getAll().map((item, itemIndex) => ({
             item,

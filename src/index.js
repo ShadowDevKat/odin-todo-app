@@ -1,5 +1,5 @@
 import "./styles.css";
-import { format, parseISO } from "date-fns";
+import { format, parse, parseISO } from "date-fns";
 import { levels, ProjectManager } from "./modules/todo";
 import { renderTodos, bindEvents, renderProjects, showItemView, showItemEdit, showProjectAdd, showItemAdd, hideModal } from "./modules/display";
 
@@ -9,124 +9,184 @@ const addProjectBtn = document.querySelector("#add-project-btn");
 const addItemBtn = document.querySelector("#add-item-btn");
 const allBtn = document.querySelector("#all-btn");
 
-const addItemForm = document.querySelector("#add-book-form");
+const addItemForm = document.querySelector("#add-item-form");
+const addProjectForm = document.querySelector("#add-project-form");
+const editItemForm = document.querySelector("#edit-item-form");
 
 // Create Project Manager
 const projectManager = new ProjectManager();
 
 // Create lists
-projectManager.addTodoList("Home");
+projectManager.addProject("Home");
 
-// test todos
-projectManager.getList(0).add("Do laundry", "Wash and fold clothes");
-projectManager.getList(1).add("Finish report", "Due tomorrow", "2025-09-15");
-projectManager.getList(0).add("Do laundry", "Wash and fold clothes");
-projectManager.getList(1).add("Finish report", "Due tomorrow", "2025-09-15");
-projectManager.getList(0).add("Do laundry", "Wash and fold clothes");
-projectManager.getList(1).add("Finish report", "Due tomorrow", "2025-09-15");
+// test data
+projectManager.getProject(0).addItem("Finish report", "Due tomorrow", "15-09-2025", levels.HIGH);
+projectManager.getProject(0).addItem("Buy groceries", "Milk, eggs, bread", "17-09-2025", levels.LOW);
+projectManager.getProject(0).addItem("Gym workout", "Leg day", "18-09-2025", levels.MEDIUM);
+projectManager.getProject(0).addItem("Read book", "Finish 50 pages of current novel", "20-09-2025", levels.LOW);
+projectManager.getProject(0).addItem("Doctor appointment", "Annual checkup", "22-09-2025", levels.HIGH);
+projectManager.getProject(0).addItem("Team meeting", "Project status update", "19-09-2025", levels.MEDIUM);
+projectManager.getProject(0).addItem("Call parents", "Weekly catch-up call", "16-09-2025", levels.LOW);
+projectManager.getProject(0).addItem("Submit assignment", "Math homework", "21-09-2025", levels.HIGH);
+projectManager.getProject(0).addItem("Plan trip", "Book hotel for weekend getaway", "25-09-2025", levels.MEDIUM);
+projectManager.getProject(0).addItem("Clean house", "Vacuum and dust living room", "23-09-2025", levels.LOW);
+
+projectManager.getProject(1).addItem("Pay bills", "Electricity and internet", "24-09-2025", levels.HIGH);
+projectManager.getProject(1).addItem("Laundry", "Wash and fold clothes", "16-09-2025", levels.MEDIUM);
+projectManager.getProject(1).addItem("Prepare presentation", "Slides for client meeting", "19-09-2025", levels.HIGH);
+projectManager.getProject(1).addItem("Cook dinner", "Try new pasta recipe", "17-09-2025", levels.LOW);
+projectManager.getProject(1).addItem("Write blog post", "Topic: Web development trends", "26-09-2025", levels.MEDIUM);
+projectManager.getProject(1).addItem("Car maintenance", "Oil change and tire check", "27-09-2025", levels.HIGH);
+projectManager.getProject(1).addItem("Meditation", "15 minutes mindfulness", "18-09-2025", levels.LOW);
+projectManager.getProject(1).addItem("Send emails", "Reply to pending work emails", "20-09-2025", levels.MEDIUM);
+projectManager.getProject(1).addItem("Project deadline", "Submit final draft", "28-09-2025", levels.HIGH);
+projectManager.getProject(1).addItem("Buy gift", "For friend’s birthday", "29-09-2025", levels.LOW);
+
 
 // Render
-renderProjects(projectManager.getAllLists());
+renderProjects(projectManager.getAllProjects());
 renderTodos(projectManager.getAllItems());
 
-let currentProjectIndex = null;
+let currentProject = null;
+let currentItem = null;
 
 bindEvents({
     onProjectChange: (projectIndex) => {
-        currentProjectIndex = projectIndex;
+        currentProject = projectIndex;
         renderTodos(projectManager.getItemsFromProject(projectIndex));
     },
     onView: (projectIndex, itemIndex) => {
-        // Handle view
-        showItemView(projectManager.getListItem(projectIndex, itemIndex));
+        showItemView(projectManager.getProjectItem(projectIndex, itemIndex));
     },
     onDelete: (projectIndex, itemIndex) => {
-        projectManager.getList(projectIndex).remove(itemIndex);
+        projectManager.getProject(projectIndex).removeItem(itemIndex);
         refreshDOM();
     },
     onToggle: (projectIndex, itemIndex) => {
-        projectManager.getListItem(projectIndex, itemIndex).toggleComplete();
+        projectManager.getProjectItem(projectIndex, itemIndex).toggleComplete();
         refreshDOM();
     },
     onEdit: (projectIndex, itemIndex) => {
+        const todo = projectManager.getProjectItem(projectIndex, itemIndex);
+        if (!todo) return;
+        currentItem = { projectIndex, itemIndex };
+        setFormData(editItemForm, todo);
         showItemEdit();
-        // const todo = projectManager.getListItem(projectIndex, itemIndex);
-
-        // if (!todo) return;
-
-        // const newTitle = prompt("Edit title:", todo.title);
-        // if (newTitle === null) return;
-
-        // const newDescription = prompt("Edit description:", todo.description) || "";
-        // const newDueDate = prompt("Edit due date:", todo.dueDate) || null;
-        // const newPriority = prompt("Edit priority (Low, Medium, High):", todo.priority) || todo.priority;
-
-        // todo.update(newTitle, newDescription, newDueDate, newPriority);
-        // refreshDOM();
     }
 });
 
 function refreshDOM() {
-    renderProjects(projectManager.getAllLists());
-    if (currentProjectIndex === null) {
+    renderProjects(projectManager.getAllProjects());
+    if (currentProject === null) {
         renderTodos(projectManager.getAllItems());
     }
     else {
-        renderTodos(projectManager.getItemsFromProject(currentProjectIndex));
+        renderTodos(projectManager.getItemsFromProject(currentProject));
     }
 }
 
 
 allBtn.addEventListener("click", () => {
     renderTodos(projectManager.getAllItems());
-    currentProjectIndex = null;
+    currentProject = null;
 });
 
 addProjectBtn.addEventListener("click", () => {
-    // const projectName = prompt("Enter project name:");
-    // if (!projectName) return;
-
-    // projectManager.addTodoList(projectName);
-    // refreshDOM();
+    addProjectForm.reset();
     showProjectAdd();
 });
 
 addItemBtn.addEventListener("click", () => {
-    // if (currentProjectIndex === null) return;
-    // const title = prompt("Enter task title:");
-    // if (!title) return;
-
-    // const description = prompt("Enter task description:") || "";
-    // const dueDate = prompt("Enter due date:") || "";
-    // const priority = prompt("Enter priority:") || "";
-
-    // projectManager.getList(currentProjectIndex).add(title, description, dueDate, priority);
-    // refreshDOM();
+    if(currentProject === null) return;
+    addItemForm.reset();
     showItemAdd();
 });
 
 addItemForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const { title, description, dueDate, priority } = getFormData(addItemForm);
-    projectManager.getList(currentProjectIndex).add(title, description, dueDate, priority);
+    projectManager.getProject(currentProject).addItem(title, description, dueDate, priority);
     addItemForm.reset();
     hideModal();
+    currentItem = null;
     refreshDOM();
 });
 
-function getFormData(form) {
-    const formData = new FormData(addItemForm);
+addProjectForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(addProjectForm);
+    const title = formData.get("title");
+    projectManager.addProject(title);
+    addProjectForm.reset();
+    hideModal();
+    currentItem = null;
+    refreshDOM();
+});
 
-    let rawDate = formData.get("duedate");
-    let formattedDate = null;
-    if (rawDate) {
-        const dateObj = parseISO(rawDate);
-        formattedDate = format(dateObj, "dd-MM-yyyy");
-    }
+editItemForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!currentItem) return;
+
+    const { title, description, dueDate, priority } = getFormData(editItemForm);
+
+    projectManager
+        .getProject(currentItem.projectIndex)
+        .editItem(currentItem.itemIndex, {
+            title,
+            description,
+            dueDate,
+            priority
+        });
+
+    editItemForm.reset();
+    hideModal();
+    currentItem = null;
+    refreshDOM();
+});
+
+function formatDateToDMY(rawDate) {
+    if (!rawDate) return null;
+    const dateObj = parseISO(rawDate);
+    return format(dateObj, "dd-MM-yyyy");
+}
+
+function formatDateToYMD(rawDate) {
+    if (!rawDate) return null;
+    const dateObj = parse(rawDate, "dd-MM-yyyy", new Date());
+    return format(dateObj, "yyyy-MM-dd");
+}
+
+function getFormData(form) {
+    const formData = new FormData(form);
     return {
         title: formData.get("title"),
         description: formData.get("description"),
-        dueDate: formattedDate,
+        dueDate: formatDateToDMY(formData.get("duedate")),
         priority: formData.get("priority")
     };
 }
+
+function setFormData(form, todo) {
+    if (!form || !todo) return;
+
+    const fields = {
+        title: todo.title,
+        description: todo.description,
+        priority: todo.priority,
+        duedate: formatDateToYMD(todo.dueDate)
+    };
+
+    for (const [key, value] of Object.entries(fields)) {
+        const field = form.querySelector(`[name="${key}"]`);
+        if (field) field.value = value;
+    }
+}
+
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === 'Escape') {
+        e.preventDefault();
+        hideModal();
+        currentItem = null;
+    }
+})

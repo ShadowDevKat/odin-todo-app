@@ -118,8 +118,29 @@ header {
 .button-container {
     display: flex;
     justify-content: space-evenly;
-    gap: 1rem;
+    gap: 3rem;
 }
+
+.button-container>button {
+    font-size: 1.2rem;
+}
+
+.priority-indicator {
+    padding: 1rem;
+}
+
+.priority-low {
+    background-color: lightblue;
+}
+
+.priority-medium {
+    background-color: lightgreen;
+}
+
+.priority-high {
+    background-color: lightcoral;
+}
+
 
 /* Modal styles */
 .modal {

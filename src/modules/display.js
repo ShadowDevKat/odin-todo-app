@@ -69,13 +69,12 @@ export function renderTodos(todos) {
         todoDiv.classList.add("todo-item");
 
         todoDiv.innerHTML = `
+            <div class="priority-indicator priority-${item.priority.toLowerCase()}"></div>
             <div class="info-container">
                 <h3>${item.title}</h3>
                 <p>${item.description}</p>
                 <p>Due: ${item.dueDate || "No date"}</p>
-                <p>Priority: ${item.priority}</p>
                 <p>Completed: ${item.completed ? "Yes" : "No"}</p>
-                <p>Project: ${projectIndex}</p>
             </div>
             <div class="button-container">
                 <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn view-btn">View</button>
