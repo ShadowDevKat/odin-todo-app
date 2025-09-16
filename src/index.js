@@ -11,7 +11,8 @@ import {
     showItemAdd,
     hideModal,
     bindProjectEvents,
-    bindTodoEvents
+    bindTodoEvents,
+    showProjectEdit
 } from "./modules/display";
 
 export const contentDiv = document.querySelector("#main-container");
@@ -23,6 +24,7 @@ const allBtn = document.querySelector("#all-btn");
 const addItemForm = document.querySelector("#add-item-form");
 const addProjectForm = document.querySelector("#add-project-form");
 const editItemForm = document.querySelector("#edit-item-form");
+const editProjectForm = document.querySelector("#edit-project-form");
 
 let currentProject = null;
 let currentItem = null;
@@ -43,6 +45,19 @@ bindProjectEvents({
     onProjectChange: (projectIndex) => {
         currentProject = projectIndex;
         renderTodos(projectManager.getItemsFromProject(projectIndex));
+    },
+    onEdit: (projectIndex) => {
+        currentProject = projectIndex;
+        const currentTitle = projectManager.getProject(currentProject).listName;
+        const formInput = editProjectForm.querySelector("#title");
+        formInput.value = currentTitle;
+        showProjectEdit();
+    },
+    onDelete: (projectIndex) => {
+        projectManager.removeProject(projectIndex);
+        projectManager.save();
+        currentProject = null;
+        refreshDOM(projectManager, currentProject);
     }
 });
 
@@ -64,7 +79,7 @@ bindTodoEvents({
         const todo = projectManager.getProjectItem(projectIndex, itemIndex);
         if (!todo) return;
         currentItem = { projectIndex, itemIndex };
-        setFormData(editItemForm, todo);
+        setItemFormData(editItemForm, todo);
         showItemEdit();
     }
 });
@@ -87,7 +102,7 @@ addItemBtn.addEventListener("click", () => {
 
 addItemForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const { title, description, dueDate, priority } = getFormData(addItemForm);
+    const { title, description, dueDate, priority } = getItemFormData(addItemForm);
     projectManager.getProject(currentProject).addItem(title, description, dueDate, priority);
     projectManager.save();
 
@@ -96,23 +111,11 @@ addItemForm.addEventListener("submit", (e) => {
     refreshDOM(projectManager, currentProject);
 });
 
-addProjectForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const formData = new FormData(addProjectForm);
-    const title = formData.get("title");
-    projectManager.addProject(title);
-    projectManager.save();
-
-    addProjectForm.reset();
-    hideModal();
-    refreshDOM(projectManager, currentProject);
-});
-
 editItemForm.addEventListener("submit", (e) => {
     e.preventDefault();
     if (!currentItem) return;
 
-    const { title, description, dueDate, priority } = getFormData(editItemForm);
+    const { title, description, dueDate, priority } = getItemFormData(editItemForm);
 
     projectManager
         .getProject(currentItem.projectIndex)
@@ -129,6 +132,33 @@ editItemForm.addEventListener("submit", (e) => {
     refreshDOM(projectManager, currentProject);
 });
 
+addProjectForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(addProjectForm);
+    const title = formData.get("title");
+    projectManager.addProject(title);
+    projectManager.save();
+
+    addProjectForm.reset();
+    hideModal();
+    refreshDOM(projectManager, currentProject);
+});
+
+editProjectForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!currentProject) return;
+
+    const formData = new FormData(editProjectForm);
+    const title = formData.get("title");
+
+    projectManager.getProject(currentProject).editList(title);
+    projectManager.save();
+
+    editProjectForm.reset();
+    hideModal();
+    refreshDOM(projectManager, currentProject);
+});
+
 function formatDateToDMY(rawDate) {
     if (!rawDate) return null;
     const dateObj = parseISO(rawDate);
@@ -141,7 +171,7 @@ function formatDateToYMD(rawDate) {
     return format(dateObj, "yyyy-MM-dd");
 }
 
-function getFormData(form) {
+function getItemFormData(form) {
     const formData = new FormData(form);
     return {
         title: formData.get("title"),
@@ -151,7 +181,7 @@ function getFormData(form) {
     };
 }
 
-function setFormData(form, todo) {
+function setItemFormData(form, todo) {
     if (!form || !todo) return;
 
     const fields = {
