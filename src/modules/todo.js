@@ -71,7 +71,7 @@ class TodoList {
 export class ProjectManager {
     constructor() {
         this.projects = [];
-        this.addProject("Default");
+        this.addProject("Home");
     }
 
     addProject(name) {
@@ -112,5 +112,41 @@ export class ProjectManager {
                 itemIndex,
             }))
         );
+    }
+
+    save() {
+        localStorage.setItem("todoData", JSON.stringify(this.projects));
+    }
+
+    load() {
+        const data = JSON.parse(localStorage.getItem("todoData"));
+        if (!data) return;
+
+        this.projects = data.map((proj) => {
+            const list = new TodoList(proj.listName);
+            list.items = proj.items.map(
+                (item) =>
+                    new TodoItem(
+                        item.title,
+                        item.description,
+                        item.dueDate,
+                        item.priority
+                    )
+            );
+            list.items.forEach((item, index) => (item.completed = proj.items[index].completed));
+            return list;
+        });
+    }
+
+    isStorageEmpty() {
+        const data = JSON.parse(localStorage.getItem("todoData"));
+        if (!data) return true;
+        return false;
+    }
+
+    clearStorage() {
+        localStorage.clear();
+        this.projects = [];
+        this.addProject("Home");
     }
 }

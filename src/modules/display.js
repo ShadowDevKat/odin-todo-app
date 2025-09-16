@@ -109,7 +109,7 @@ export function refreshDOM(projectManager, currentProject) {
 
 export function bindProjectEvents({ onProjectChange }) {
     projectsLi.addEventListener("click", (e) => {
-        if (!e.target.id === "project-btn") return;
+        if (e.target.id !== "project-btn") return;
         const projectIndex = e.target.dataset.projectIndex;
         onProjectChange(projectIndex);
     });
