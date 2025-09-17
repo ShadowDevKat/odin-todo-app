@@ -31,6 +31,7 @@ export function showItemView(item = null) {
         <p>Description: ${item.description}</p>
         <p>Due date: ${item.dueDate}</p>
         <p>Priority: ${item.priority}</p>
+        <p>Complete: ${item.completed}</p>
     `;
 }
 export function showItemEdit() {
@@ -93,25 +94,32 @@ export function renderProjects(projects) {
 export function renderTodos(todos) {
     contentDiv.innerHTML = "";
 
-    [...todos].reverse().forEach(({ item, projectIndex, itemIndex }) => {
+    const reversedItems = todos.slice().reverse();
+    reversedItems.forEach(({ item, projectIndex, itemIndex }) => {
         const todoDiv = document.createElement("div");
         todoDiv.classList.add("todo-item");
+        if (item.completed) {
+            todoDiv.classList.add("completed-item");
+        }
+        todoDiv.dataset.projectIndex = projectIndex;
+        todoDiv.dataset.itemIndex = itemIndex;
 
         todoDiv.innerHTML = `
             <div class="priority-indicator priority-${item.priority.toLowerCase()}"></div>
             <div class="info-container">
-                <h3>${item.title}</h3>
-                <p>${item.description}</p>
-                <p>Due: ${item.dueDate || "No date"}</p>
-                <p>Completed: ${item.completed ? "Yes" : "No"}</p>
+                <input type="checkbox" name="item-checkbox" class="toggle-btn" id="item-${projectIndex}-${itemIndex}">
+                <label for="item-${projectIndex}-${itemIndex}" class="item-title 
+                ${item.completed ? "strike-through" : ""}">${item.title}</label>
+                <p>Due by: ${item.dueDate}</p>
             </div>
             <div class="button-container">
-                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn" id="view-btn">View</button>
-                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn" id="delete-btn">Delete</button>
-                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn" id="toggle-btn">Toggle</button>
-                <button data-project-index="${projectIndex}" data-item-index="${itemIndex}" class="btn full-btn" id="edit-btn">Edit</button>
-            </div>
+                <img class="icon icon-btn view-btn" src=${listIcon} alt="view-icon">
+                <img class="icon icon-btn edit-btn" src=${editIcon} alt="edit-icon">
+                <img class="icon icon-btn delete-btn" src=${deleteIcon} alt="delete-icon">
         `;
+
+        const checkBox = todoDiv.querySelector(".toggle-btn");
+        checkBox.checked = item.completed;
 
         contentDiv.appendChild(todoDiv);
     });
@@ -183,25 +191,23 @@ export function triggerProjectChange(projectIndex) {
 
 export function bindTodoEvents({ onView, onDelete, onToggle, onEdit }) {
     contentDiv.addEventListener("click", (e) => {
-        const projectIndex = e.target.dataset.projectIndex;
-        const itemIndex = e.target.dataset.itemIndex;
-        const targetID = e.target.id;
+        const clickedTodo = e.target.closest(".todo-item");
+        if (!clickedTodo) return;
+        const projectIndex = clickedTodo.dataset.projectIndex;
+        const itemIndex = clickedTodo.dataset.itemIndex;
+        const targetClasslist = e.target.classList;
 
-        switch (targetID) {
-            case "view-btn":
-                onView(projectIndex, itemIndex);
-                break;
-            case "delete-btn":
-                onDelete(projectIndex, itemIndex);
-                break;
-            case "toggle-btn":
-                onToggle(projectIndex, itemIndex);
-                break;
-            case "edit-btn":
-                onEdit(projectIndex, itemIndex);
-                break;
-            default:
-                break;
+        if (targetClasslist.contains("view-btn")) {
+            onView(projectIndex, itemIndex);
+        }
+        else if (targetClasslist.contains("edit-btn")) {
+            onEdit(projectIndex, itemIndex);
+        }
+        else if (targetClasslist.contains("delete-btn")) {
+            onDelete(projectIndex, itemIndex);
+        }
+        else if (targetClasslist.contains("toggle-btn")) {
+            onToggle(projectIndex, itemIndex);
         }
     });
 }

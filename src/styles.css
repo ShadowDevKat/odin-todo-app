@@ -53,7 +53,7 @@ header {
 
 .side-bar {
     grid-column: span 1;
-    padding: 1rem;
+    padding: 2rem 1rem;
     background-color: var(--color-secondary);
 
     display: flex;
@@ -91,7 +91,7 @@ header {
 #main-container {
     grid-column: 2 / -1;
     padding: 1rem;
-    background-color: var(--color-primary);
+    background-color: var(--floral-white);
 
     display: flex;
     flex-direction: column;
@@ -102,13 +102,14 @@ header {
 
 /* Item styles */
 .todo-item {
-    height: 10%;
+    min-height: 5rem;
     width: 100%;
     background-color: var(--color-accent);
     display: flex;
     gap: 1rem;
     border-radius: 1rem;
 }
+
 
 .info-container {
     flex: 1;
@@ -130,13 +131,19 @@ header {
     margin-right: 2rem;
 }
 
-.button-container>button {
-    font-size: 1.2rem;
+/* Item status styles */
+.completed-item {
+    opacity: 0.8;
+}
+
+.strike-through {
+    text-decoration: line-through;
 }
 
 .priority-indicator {
-    width: 1rem;
-    border-radius: inherit;
+    width: 1.2rem;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
 }
 
 .priority-low {
