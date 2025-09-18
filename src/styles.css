@@ -5,17 +5,29 @@
 }
 
 :root {
-    --floral-white: #fffcf2ff;
-    --timber-wolf: #ccc5b9ff;
-    --black-olive: #403d39ff;
-    --eerie-black: #252422ff;
+    /* Base Palette */
+    --floral-white: #fffcf2;
+    --timber-wolf: #ccc5b9;
+    --black-olive: #403d39;
+    --eerie-black: #252422;
     --eerie-black-translucent: rgba(37, 36, 34, 0.3);
 
+    /* App Theme */
     --primary-color: #1992d4;
-    --default-color: #ffffff;
     --secondary-color: #e2e8f0;
     --accent-color: #f0b832;
+    --default-color: #ffffff;
 
+    /* Priorities */
+    --priority-low: #22c55e;   /* green */
+    --priority-medium: #eab308; /* yellow */
+    --priority-high: #ef4444;   /* red */
+
+    /* Neutral */
+    --border-color: #ccc;
+    --shadow-dark: rgba(0, 0, 0, 0.25);
+
+    /* Filters */
     --filter-white: invert(100%) sepia(99%) saturate(0%) hue-rotate(197deg) brightness(105%) contrast(100%);
     --filter-black: invert(0%) sepia(100%) saturate(0%) hue-rotate(253deg) brightness(107%) contrast(103%);
 
@@ -29,6 +41,7 @@ body {
     overflow: hidden;
 }
 
+/* Container & Layout */
 #content {
     width: 100%;
     height: 100%;
@@ -158,15 +171,15 @@ header {
 }
 
 .priority-low {
-  background-color: #22c55e;
+  background-color: var(--priority-low);
 }
 
 .priority-medium {
-  background-color: #eab308;
+  background-color: var(--priority-medium);
 }
 
 .priority-high {
-  background-color: #ef4444;
+  background-color: var(--priority-high);
 }
 
 /* Modal styles */
@@ -174,11 +187,7 @@ header {
     display: flex;
     position: fixed;
     z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(0, 0, 0);
+    inset: 0;
     background-color: rgba(0, 0, 0, 0.4);
 
     justify-content: center;
@@ -188,7 +197,7 @@ header {
 .modal-content {
     background-color: var(--primary-color);
     padding: 1.5rem;
-    border: 1px solid #888;
+    border: 1px solid var(--border-color);
     border-radius: 2rem;
     width: 50%;
     display: flex;
@@ -265,7 +274,7 @@ select,
 textarea {
     font-size: 1rem;
     padding: 0.75rem 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 0.4rem;
     width: 100%;
 }
@@ -282,7 +291,7 @@ textarea {
 .btn {
     text-align: center;
     font-size: 1.7rem;
-    color: white;
+    color: var(--default-color);
     background-color: var(--eerie-black);
     border: none;
     border-radius: 3rem;
@@ -323,7 +332,7 @@ textarea {
     background-color: var(--eerie-black);
     font-weight: 600;
     transform: scale(1.02);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 10px var(--shadow-dark);
     transition: all 0.2s ease;
 }
 
@@ -382,7 +391,6 @@ textarea {
     height: 3rem;
 }
 
-/* General Styles */
 .hidden {
     visibility: hidden;
 }
