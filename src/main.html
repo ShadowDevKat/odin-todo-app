@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <div class="modal" id="item-view">
+    <div class="modal hidden" id="item-view">
         <div class="modal-content">
             <div class="modal-header">
                 <h1>ToDo</h1>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="modal" id="item-add">
+    <div class="modal hidden" id="item-add">
         <div class="modal-content">
             <div class="modal-header">
                 <h1>New ToDo</h1>
@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <div class="modal" id="project-add">
+    <div class="modal hidden" id="project-add">
         <div class="modal-content">
             <div class="modal-header">
                 <h1>New Project</h1>
@@ -84,7 +84,7 @@
         </div>
     </div>
 
-    <div class="modal" id="project-edit">
+    <div class="modal hidden" id="project-edit">
         <div class="modal-content">
             <div class="modal-header">
                 <h1>Edit Project</h1>
@@ -104,7 +104,7 @@
         </div>
     </div>
 
-    <div class="modal" id="item-edit">
+    <div class="modal hidden" id="item-edit">
         <div class="modal-content">
             <div class="modal-header">
                 <h1>Edit ToDo</h1>
@@ -145,7 +145,7 @@
 
     <div id="content">
         <header>
-            TO-DO
+            Simple To-Do
         </header>
         <nav class="side-bar">
             <div>
@@ -156,8 +156,12 @@
                 <div class="projects-list">
                 </div>
             </div>
-            <button class="btn full-btn" id="add-item-btn">Add Item</button>
         </nav>
+
+        <div class="main-heading">
+            <h3>TItle</h3>
+            <img class="icon icon-btn" id="add-item-btn" src="./icons/add-icon.svg" alt="add-icon">
+        </div>
 
         <div id="main-container">
 

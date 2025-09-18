@@ -34,13 +34,13 @@ body {
     background-color: var(--black-olive);
     display: grid;
     grid-template-columns: 20% 80%;
-    grid-template-rows: 5rem auto;
+    grid-template-rows: 5rem 4rem auto;
 }
 
 header {
     grid-row: span 1;
     grid-column: 1 / -1;
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     background-color: var(--color-tertiary);
 
     display: flex;
@@ -53,7 +53,8 @@ header {
 
 .side-bar {
     grid-column: span 1;
-    padding: 2rem 1rem;
+    grid-row: 2 / -1;
+    padding: 1rem 1.5rem;
     background-color: var(--color-secondary);
 
     display: flex;
@@ -76,7 +77,6 @@ header {
 
 .projects-list {
     margin-top: 1rem;
-    /* padding-left: 2rem; */
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -88,8 +88,20 @@ header {
     width: auto;
 }
 
+.main-heading {
+    grid-column: 2 / -1;
+    grid-row: 2 / 3;
+    padding: 1.5rem;
+
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    gap: 2rem;
+}
+
 #main-container {
     grid-column: 2 / -1;
+    grid-row: 3 / -1;
     padding: 1rem;
     background-color: var(--floral-white);
 
@@ -109,7 +121,6 @@ header {
     gap: 1rem;
     border-radius: 1rem;
 }
-
 
 .info-container {
     flex: 1;
@@ -161,7 +172,7 @@ header {
 
 /* Modal styles */
 .modal {
-    display: none;
+    display: flex;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -343,4 +354,9 @@ textarea {
 .icon-large {
     width: 3rem;
     height: 3rem;
+}
+
+/* General Styles */
+.hidden {
+    visibility: hidden;
 }

@@ -13,13 +13,14 @@ import {
     bindProjectEvents,
     bindTodoEvents,
     showProjectEdit,
-    triggerProjectChange
+    triggerProjectChange,
+    renderHeading
 } from "./modules/display";
 
 export const contentDiv = document.querySelector("#main-container");
 export const projectsLi = document.querySelector(".projects-list")
+export const addItemBtn = document.querySelector("#add-item-btn");
 const addProjectBtn = document.querySelector("#add-project-btn");
-const addItemBtn = document.querySelector("#add-item-btn");
 
 const addItemForm = document.querySelector("#add-item-form");
 const addProjectForm = document.querySelector("#add-project-form");
@@ -42,11 +43,13 @@ bindProjectEvents({
     onProjectChange: (projectIndex) => {
         if (!projectIndex) {
             currentProject = null;
+            renderHeading("All Todo's");
             renderTodos(projectManager.getAllItems());
         }
         else {
             currentProject = projectIndex;
-            renderTodos(projectManager.getItemsFromProject(projectIndex));
+            renderHeading(projectManager.getProject(currentProject).listName, true);
+            renderTodos(projectManager.getItemsFromProject(projectIndex), true);
         }
     },
     onEdit: (projectIndex) => {
@@ -75,7 +78,6 @@ bindTodoEvents({
     },
     onToggle: (projectIndex, itemIndex) => {
         projectManager.getProjectItem(projectIndex, itemIndex).toggleComplete();
-        // console.log(projectManager.getProjectItem(projectIndex, itemIndex));
         projectManager.save();
         refreshDOM(projectManager, currentProject);
     },

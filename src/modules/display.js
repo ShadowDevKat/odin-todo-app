@@ -9,6 +9,7 @@ const itemAddModal = document.getElementById("item-add");
 const projectAddModal = document.getElementById("project-add");
 const projectEditModal = document.getElementById("project-edit");
 const viewCloseBtn = document.querySelectorAll("#close-btn");
+const mainHeadingDiv = document.querySelector(".main-heading");
 
 let activeModal = null;
 
@@ -49,7 +50,7 @@ export function showProjectEdit() {
 
 function showModal(modal) {
     activeModal = modal;
-    modal.style.display = "flex";
+    activeModal.classList.remove("hidden");
 }
 
 let onCloseCallbacks = [];
@@ -60,9 +61,18 @@ export function onModalClose(callback) {
 
 export function hideModal() {
     if (activeModal === null) return;
-    activeModal.style.display = "none";
+    activeModal.classList.add("hidden");
     activeModal = null;
     onCloseCallbacks.forEach(cb => cb());
+}
+
+function toggleElement(element, value = true) {
+    if (value) {
+        element.classList.add("hidden");
+    }
+    else {
+        element.classList.remove("hidden");
+    }
 }
 
 export function renderProjects(projects) {
@@ -93,6 +103,7 @@ export function renderProjects(projects) {
 
 export function renderTodos(todos) {
     contentDiv.innerHTML = "";
+    contentDiv.scrollTop = 0;
 
     const reversedItems = todos.slice().reverse();
     reversedItems.forEach(({ item, projectIndex, itemIndex }) => {
@@ -123,6 +134,14 @@ export function renderTodos(todos) {
 
         contentDiv.appendChild(todoDiv);
     });
+}
+
+export function renderHeading(projectName, displayAddBtn = false) {
+    const heading = mainHeadingDiv.querySelector("h3");
+    heading.textContent = projectName;
+
+    const addBtn = mainHeadingDiv.querySelector("#add-item-btn");
+    toggleElement(addBtn, !displayAddBtn);
 }
 
 export function refreshDOM(projectManager, currentProject) {
