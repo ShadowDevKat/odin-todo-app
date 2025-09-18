@@ -11,12 +11,13 @@
     --eerie-black: #252422ff;
     --eerie-black-translucent: rgba(37, 36, 34, 0.3);
 
-    --color-primary: hsl(263, 50%, 90%);
-    --color-secondary: hsl(263, 50%, 10%);
-    --color-tertiary: hsl(323, 80%, 20%);
-    --color-accent: hsl(203, 80%, 20%);
+    --primary-color: #1992d4;
+    --default-color: #ffffff;
+    --secondary-color: #e2e8f0;
+    --accent-color: #f0b832;
 
     --filter-white: invert(100%) sepia(99%) saturate(0%) hue-rotate(197deg) brightness(105%) contrast(100%);
+    --filter-black: invert(0%) sepia(100%) saturate(0%) hue-rotate(253deg) brightness(107%) contrast(103%);
 
     font-family: Roboto, sans-serif;
     color: var(--floral-white);
@@ -34,28 +35,29 @@ body {
     background-color: var(--black-olive);
     display: grid;
     grid-template-columns: 20% 80%;
-    grid-template-rows: 5rem 4rem auto;
+    grid-template-rows: 5rem auto;
 }
 
 header {
     grid-row: span 1;
-    grid-column: 1 / -1;
-    padding: 1rem 1.5rem;
-    background-color: var(--color-tertiary);
+    grid-column: 2 / -1;
+    padding: 1.5rem;
+    background-color: var(--eerie-black);
 
     display: flex;
     align-items: center;
 
-    font-size: 3rem;
+    font-size: 2rem;
     font-style: italic;
     font-weight: 600;
+    gap: 2rem;
 }
 
 .side-bar {
     grid-column: span 1;
-    grid-row: 2 / -1;
+    grid-row: 1 / -1;
     padding: 1rem 1.5rem;
-    background-color: var(--color-secondary);
+    background-color: var(--primary-color);
 
     display: flex;
     flex-direction: column;
@@ -73,6 +75,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: 600;
 }
 
 .projects-list {
@@ -88,22 +94,11 @@ header {
     width: auto;
 }
 
-.main-heading {
-    grid-column: 2 / -1;
-    grid-row: 2 / 3;
-    padding: 1.5rem;
-
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-    gap: 2rem;
-}
-
 #main-container {
     grid-column: 2 / -1;
-    grid-row: 3 / -1;
+    grid-row: 2 / -1;
     padding: 1rem;
-    background-color: var(--floral-white);
+    background-color: var(--black-olive);
 
     display: flex;
     flex-direction: column;
@@ -116,7 +111,7 @@ header {
 .todo-item {
     min-height: 5rem;
     width: 100%;
-    background-color: var(--color-accent);
+    background-color: var(--eerie-black);
     display: flex;
     gap: 1rem;
     border-radius: 1rem;
@@ -133,6 +128,11 @@ header {
 
 .item-title {
     flex: 1;
+    font-size: 1.5rem;
+}
+
+.item-date {
+    font-style: italic;
 }
 
 .button-container {
@@ -144,7 +144,7 @@ header {
 
 /* Item status styles */
 .completed-item {
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 .strike-through {
@@ -158,17 +158,16 @@ header {
 }
 
 .priority-low {
-    background-color: lightblue;
+  background-color: #22c55e;
 }
 
 .priority-medium {
-    background-color: lightgreen;
+  background-color: #eab308;
 }
 
 .priority-high {
-    background-color: lightcoral;
+  background-color: #ef4444;
 }
-
 
 /* Modal styles */
 .modal {
@@ -187,7 +186,7 @@ header {
 }
 
 .modal-content {
-    background-color: var(--black-olive);
+    background-color: var(--primary-color);
     padding: 1.5rem;
     border: 1px solid #888;
     border-radius: 2rem;
@@ -210,13 +209,12 @@ header {
 
 /* View Style */
 .view-detail {
-    background-color: var(--floral-white);
-    color: black;
-    border-radius: 2rem;
+    background-color: var(--black-olive);
+    border-radius: 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1rem;
+    padding: 2rem;
 }
 
 .view-group {
@@ -296,6 +294,7 @@ textarea {
 }
 
 .btn:hover {
+    background-color: var(--black-olive);
     transform: scale(1.1);
 }
 
@@ -344,7 +343,6 @@ textarea {
 
 #project-btn>p {
     flex: 1;
-    /* pointer-events: none; */
 }
 
 #project-btn>*:nth-child(-n+2) {
@@ -354,7 +352,7 @@ textarea {
 /* Icon style */
 .icon-btn {
     transform: scale(1);
-    transition: transform 0.3s ease;
+    transition: transform 0.1s ease;
 
     will-change: transform;
     backface-visibility: hidden;

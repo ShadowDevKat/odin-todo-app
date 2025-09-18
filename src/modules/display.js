@@ -2,6 +2,7 @@ import { contentDiv, projectsLi } from "..";
 import listIcon from "../icons/list-icon.svg"
 import editIcon from "../icons/edit-icon.svg"
 import deleteIcon from "../icons/delete-icon.svg"
+import viewIcon from "../icons/view-icon.svg"
 
 const itemViewModal = document.getElementById("item-view");
 const itemEditModal = document.getElementById("item-edit");
@@ -9,7 +10,7 @@ const itemAddModal = document.getElementById("item-add");
 const projectAddModal = document.getElementById("project-add");
 const projectEditModal = document.getElementById("project-edit");
 const viewCloseBtn = document.querySelectorAll("#close-btn");
-const mainHeadingDiv = document.querySelector(".main-heading");
+const mainHeadingDiv = document.querySelector("header");
 
 let activeModal = null;
 
@@ -130,14 +131,14 @@ export function renderTodos(todos) {
             <div class="priority-indicator priority-${item.priority.toLowerCase()}"></div>
             <div class="info-container">
                 <input type="checkbox" name="item-checkbox" class="toggle-btn" id="item-${projectIndex}-${itemIndex}">
-                <label for="item-${projectIndex}-${itemIndex}" class="item-title 
-                ${item.completed ? "strike-through" : ""}">${item.title}</label>
-                <p>Due by: ${item.dueDate}</p>
+                <label for="item-${projectIndex}-${itemIndex}" class="item-title ${item.completed ? "strike-through" : ""}">${item.title}</label>
+                <p class="item-date">Due by: ${item.dueDate}</p>
             </div>
             <div class="button-container">
-                <img class="icon icon-btn view-btn" src=${listIcon} alt="view-icon">
+                <img class="icon icon-btn view-btn" src=${viewIcon} alt="view-icon">
                 <img class="icon icon-btn edit-btn" src=${editIcon} alt="edit-icon">
                 <img class="icon icon-btn delete-btn" src=${deleteIcon} alt="delete-icon">
+            </div>
         `;
 
         const checkBox = todoDiv.querySelector(".toggle-btn");
@@ -158,9 +159,11 @@ export function renderHeading(projectName, displayAddBtn = false) {
 export function refreshDOM(projectManager, currentProject) {
     renderProjects(projectManager.getAllProjects());
     if (currentProject === null) {
+        triggerProjectChange("");
         renderTodos(projectManager.getAllItems());
     }
     else {
+        triggerProjectChange(currentProject);
         renderTodos(projectManager.getItemsFromProject(currentProject));
     }
 }
@@ -206,7 +209,7 @@ function selectProject(target, projectIndex) {
     }
 }
 
-export function triggerProjectChange(projectIndex) {
+function triggerProjectChange(projectIndex) {
     const btn = projectsLi.querySelector(
         `[data-project-index="${projectIndex}"][id="project-btn"]`
     );

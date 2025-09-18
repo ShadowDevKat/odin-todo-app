@@ -13,7 +13,6 @@ import {
     bindProjectEvents,
     bindTodoEvents,
     showProjectEdit,
-    triggerProjectChange,
     renderHeading
 } from "./modules/display";
 
@@ -169,7 +168,6 @@ document.addEventListener("keydown", (e) => {
 
 // Initial Render
 refreshDOM(projectManager, currentProject);
-triggerProjectChange("");
 
 function formatDateToDMY(rawDate) {
     if (!rawDate) return null;
@@ -246,7 +244,7 @@ function loadDummyData() {
 
 
 // Storage test
-window.clearData = clearData;
+// window.clearData = clearData;
 
 function clearData() {
     projectManager.clearStorage();
