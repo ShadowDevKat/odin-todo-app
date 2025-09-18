@@ -24,15 +24,26 @@ export function showItemView(item = null) {
 
     showModal(itemViewModal);
 
-    const detailsDiv = activeModal.querySelector(".modal-detail");
+    const detailsDiv = activeModal.querySelector(".view-detail");
     detailsDiv.innerHTML = "";
 
     detailsDiv.innerHTML = `
-        <h2>Title: ${item.title}</h3>
-        <p>Description: ${item.description}</p>
-        <p>Due date: ${item.dueDate}</p>
-        <p>Priority: ${item.priority}</p>
-        <p>Complete: ${item.completed}</p>
+        <div class="view-group">
+            <h3>Title:</h3>
+            <p>${item.title}</p>
+        </div>
+        <div class="view-group">
+            <h3>Description:</h3>
+            <p>${item.description}</p>
+        </div>
+        <div class="view-group">
+            <h3>Due date:</h3>
+            <p>${item.dueDate}</p>
+        </div>
+        <div class="view-group">
+            <h3>Priority:</h3>
+            <p>${item.priority}</p>
+        </div>
     `;
 }
 export function showItemEdit() {
